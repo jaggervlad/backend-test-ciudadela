@@ -18,8 +18,8 @@ Asegúrate de tener Node.js instalado.
 Para inicializar el  proyecto
 
 ```bash
-npm install sebastian-backend-test
-cd sebastian-backend-test
+npm install backend-test-ciudadela
+cd backend-test-ciudadela
 npm run dev
 # or
 yarn dev
@@ -29,16 +29,13 @@ pnpm dev
 bun dev
 ```
     
-## Deployment
+## Estructura del Proyecto
 
-En vercel
-
-```bash
-  git push
-```
+- `/src/index.ts`: Servidor
+- `/src/services`: Aca van todos los servicios o features del servidor.
 
 
-## Authors
+## Author
 
 - [@jaggervlad](https://www.github.com/jaggervlad)
 
