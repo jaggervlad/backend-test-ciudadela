@@ -14,7 +14,7 @@ export async function getCharactersController(req: Request, res: Response) {
       error: null,
     });
   } catch (error) {
-    return res.status(404).json({
+    return res.status(500).json({
       ok: false,
       data: null,
       error: 'Ha ocurrido un error obteniendo personajes',
