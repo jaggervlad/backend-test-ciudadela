@@ -1,15 +1,8 @@
 import { Router } from 'express';
-import { UserController } from './user.controller';
-import { UserModel } from './user.model';
+import { userController } from './user.controller';
 
-type UserRoutesProps = {
-  userModel: typeof UserModel;
-};
-
-export const createUserRoutes = ({ userModel }: UserRoutesProps) => {
+export const createUserRoutes = () => {
   const router = Router();
-
-  const userController = new UserController({ userModel });
 
   router.get('/', userController.getAll);
   router.get('/:id', userController.getById);

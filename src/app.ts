@@ -2,10 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import { rickMortyRouter } from './services/rick-morty-api/routes';
-import { UserModel } from './services/users/user.model';
-import { createUserRoutes } from './services/users/user.routes';
 import { errorMiddleware } from './middlewares/error.handler';
+
+import { publicRoutes } from './routes';
+import { rickMortyRouter } from './services/rick-morty-api/routes';
 
 const createApp = () => {
   const port = process.env.PORT || 4000;
@@ -20,7 +20,7 @@ const createApp = () => {
 
   // Routes
   app.use(rickMortyRouter);
-  app.use('/users', createUserRoutes({ userModel: UserModel }));
+  app.use('/api', publicRoutes());
 
   // Handle Error Middleware
   app.use(errorMiddleware);

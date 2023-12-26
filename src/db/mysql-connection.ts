@@ -6,9 +6,9 @@ export async function createConnection() {
   if (!connectionIntance) {
     connectionIntance = mysql.createPool({
       database: 'platform-test',
-      user: 'pywta51og2f1s5e1rodl',
+      user: '7ppc5kkscd1wzuckzfdd',
       host: 'aws.connect.psdb.cloud',
-      password: 'pscale_pw_5Rl7Hnn7Z5k7UUOQejmRfyBnPWrGD3Le2teIaoPrsoZ',
+      password: 'pscale_pw_e8wTQEAbUROkHk1mjk6wUeLnBxXOoJKTr7s6JvvWlNw',
       ssl: {
         rejectUnauthorized: true,
       },

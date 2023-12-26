@@ -1,22 +1,18 @@
+import { UserRespository } from './user.respository';
 import { NextFunction, Request, Response } from 'express';
-import { UserModel } from './user.model';
-import { ZodError } from 'zod';
 import { validatePartialUserInput, validateUserInput } from './user.schema';
-
-type UserControllerType = {
-  userModel: typeof UserModel;
-};
+import { UserMysqlRepository } from './user.mysql.repository';
 
 export class UserController {
-  userModel: typeof UserModel;
+  userRespository: UserRespository;
 
-  constructor({ userModel }: UserControllerType) {
-    this.userModel = userModel;
+  constructor(userRespository: UserRespository) {
+    this.userRespository = userRespository;
   }
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const users = await this.userModel.getAll();
+      const users = await this.userRespository.getAll();
 
       return res.status(200).json({
         ok: true,
@@ -35,9 +31,11 @@ export class UserController {
   };
 
   getById = async (req: Request, res: Response) => {
+    console.log('here?');
+
     try {
       const id = +req.params.id;
-      const user = await this.userModel.getById(id);
+      const user = await this.userRespository.getById(id);
 
       return res.status(200).json({
         ok: true,
@@ -59,7 +57,7 @@ export class UserController {
       const body = req.body;
       const data = await validateUserInput(body);
 
-      await this.userModel.create(data);
+      await this.userRespository.create(data);
 
       return res.status(200).json({
         ok: true,
@@ -78,7 +76,7 @@ export class UserController {
 
       const data = await validatePartialUserInput(body);
 
-      const user = await this.userModel.update(data, id);
+      const user = await this.userRespository.updateById(id, data);
 
       return res.status(200).json({
         ok: true,
@@ -93,7 +91,7 @@ export class UserController {
   delete = async (req: Request, res: Response) => {
     try {
       const id = +req.params.id;
-      await this.userModel.delete(id);
+      await this.userRespository.deleteById(id);
 
       return res.status(200).json({
         ok: true,
@@ -112,4 +110,6 @@ export class UserController {
   };
 }
 
-const handleError = (error: unknown) => {};
+const userRespository = new UserMysqlRepository();
+
+export const userController = new UserController(userRespository);
