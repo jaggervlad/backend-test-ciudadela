@@ -1,7 +1,7 @@
-import { UserRespository } from './user.respository';
+import { UserRespository, LoginResponse } from './user.respository';
 import { NextFunction, Request, Response } from 'express';
 import { validatePartialUserInput, validateUserInput } from './user.schema';
-import { UserMysqlRepository } from './user.mysql.repository';
+import { UserMongoRepository } from './user.mongo.repository';
 
 export class UserController {
   userRespository: UserRespository;
@@ -31,10 +31,8 @@ export class UserController {
   };
 
   getById = async (req: Request, res: Response) => {
-    console.log('here?');
-
     try {
-      const id = +req.params.id;
+      const id = req.params.id;
       const user = await this.userRespository.getById(id);
 
       return res.status(200).json({
@@ -71,17 +69,17 @@ export class UserController {
 
   update = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = +req.params.id;
+      const id = req.params.id;
       const body = req.body;
 
       const data = await validatePartialUserInput(body);
 
-      const user = await this.userRespository.updateById(id, data);
+      await this.userRespository.updateById(id, data);
 
       return res.status(200).json({
         ok: true,
         error: null,
-        data: user,
+        data: 'Editado correctamente',
       });
     } catch (error) {
       next(error);
@@ -90,7 +88,7 @@ export class UserController {
 
   delete = async (req: Request, res: Response) => {
     try {
-      const id = +req.params.id;
+      const id = req.params.id;
       await this.userRespository.deleteById(id);
 
       return res.status(200).json({
@@ -108,8 +106,30 @@ export class UserController {
       });
     }
   };
+
+  login = async (req: Request, res: Response) => {
+    try {
+      const { email, password } = req.body;
+
+      const loginResponse = await this.userRespository.login(email, password);
+
+      return res.status(200).json({
+        ok: true,
+        error: null,
+        data: loginResponse,
+      });
+    } catch (error) {
+      console.error(error);
+
+      return res.status(500).json({
+        ok: false,
+        error: 'Algo salio mal intentalo de nuevo',
+        data: null,
+      });
+    }
+  };
 }
 
-const userRespository = new UserMysqlRepository();
+const userRespository = new UserMongoRepository();
 
 export const userController = new UserController(userRespository);
